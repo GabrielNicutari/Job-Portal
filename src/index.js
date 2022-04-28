@@ -1,16 +1,36 @@
+require('./models/User');
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
+const authRoutes = require('./routes/authRoutes');
 
-//const requireAuth = require('./middlewares/requireAuth');
+const requireAuth = require('./middlewares/requireAuth');
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(authRoutes);
 
-// app.get('/', requireAuth, (req, res) => {
-// 	console.log(req.user);
-// 	res.send(`Your email: ${req.user.email}`);
-// });
+const user = process.env.MONGO_USERNAME;
+const password = process.env.MONGO_PASSWORD;
+
+const mongoUri =
+	`mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/jobPortal?retryWrites=true&w=majority`;
+
+mongoose.connect(mongoUri, {
+	useNewUrlParser: true,
+	//useCreateIndex: true,
+	useUnifiedTopology: true
+});
+
+mongoose.connection.on('connected', () => {
+	console.log('Connected to mongo instance');
+});
+
+app.get('/', requireAuth, (req, res) => {
+	console.log(req.user);
+	res.send(`Your email: ${req.user.email}`);
+});
 
 const PORT = process.env.PORT || 8080;
 
