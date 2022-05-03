@@ -16,7 +16,7 @@ const database = process.env.MONGO_DATABASE;
 
 const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/${database}?retryWrites=true&w=majority`;
 
-const initApp = async () => {
+(initApp = async () => {
     try {
         mongoose.connect(mongoUri, {
             useNewUrlParser: true,
@@ -48,6 +48,4 @@ const initApp = async () => {
     } catch (error) {
         console.error("Unable to connect to the database:", error.original);
     }
-}
-
-initApp();
+});

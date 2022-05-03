@@ -19,12 +19,18 @@ const sequelize = new Sequelize(
         }
     });
 
-const User = require('./User')(sequelize);
-const Role = require('./Role')(sequelize);
+const Application = require('./Application')(sequelize);
+// const Benefit = require('Benefits')(sequelize);
+// const Category = require('Categories')(sequelize);
+// const CategoryHasJobs = require(CategoryHasJob)(sequelize);
 const Company = require('./Company')(sequelize);
-const Job = require('./Job')(sequelize);
 const JobStatus = require('./JobStatus')(sequelize);
 const JobType = require('./JobType')(sequelize);
+const Job = require('./Job')(sequelize);
+// const JobHasBenefits = require('./JobHasBenefits')(sequelize);
+const Role = require('./Role')(sequelize);
+// const RoleHasJobs = require('./RoleHasJobs')(sequelize);
+const User = require('./User')(sequelize);
 
 // create associations
 User.hasOne(Role, {
@@ -67,9 +73,17 @@ Job.hasOne(JobType, {
 });
 JobType.belongsTo(Job);
 
+Application.hasOne(Job, {
+    foreignKey: {
+        name: 'job_id',
+        type: DataTypes.INTEGER
+    }
+});
+
 // get all users for testing...
-const getUsers = require('./fetchData');
-getUsers(User).then(r => console.log('success', r)).catch((err) => console.log(err));
+const getApplications = require('./fetchData');
+// getUsers(User).then(r => console.log('success', r)).catch((err) => console.log(err));
+getApplications(Application).then(r => console.log('success', r)).catch((err) => console.log(err));
 
 module.exports = sequelize;
 
