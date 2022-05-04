@@ -67,6 +67,10 @@ Job.hasOne(JobType, {
 });
 JobType.belongsTo(Job);
 
+// get all users for testing...
+const getUsers = require('./fetchData');
+getUsers(User).then(r => console.log('success', r)).catch((err) => console.log(err));
+
 module.exports = sequelize;
 
 
