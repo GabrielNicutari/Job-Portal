@@ -1,6 +1,6 @@
 const {DataTypes} = require('sequelize');
 
-const JobType = (sequelize) => {
+module.exports = (sequelize) => {
     return sequelize.define(
         "job_types",
         {
@@ -20,5 +20,3 @@ const JobType = (sequelize) => {
         }
     );
 }
-
-module.exports = JobType;

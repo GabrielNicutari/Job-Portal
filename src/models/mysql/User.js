@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 
-const User = (sequelize) => {
+module.exports = (sequelize) => {
     return sequelize.define(
         "users",
         {
@@ -30,5 +30,3 @@ const User = (sequelize) => {
         }
     );
 }
-
-module.exports = User;
