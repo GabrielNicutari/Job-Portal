@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const requireAuth = require('./middlewares/requireAuth');
-const sequelize = require('./models/mysql/dbAssociations');
+const db = require('./models/mysql/dbAssociations');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -36,7 +36,7 @@ const initApp = async () => {
         const PORT = process.env.PORT || 8080;
 
         console.log("Testing mysql connection..");
-        await sequelize.authenticate();
+        await db.authenticate();
         console.log("Connection to mysql established successfully.");
 
         app.listen(PORT, (error) => {
