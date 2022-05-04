@@ -1,0 +1,5 @@
+The index.js file in our models/mysql directory is used as the entry point for
+accessing our model. Therefore, you can access our model in a component as shown here:
+
+    const User = require('./models/mysql');
+    await User.findAll(); // call whatever method on User model
