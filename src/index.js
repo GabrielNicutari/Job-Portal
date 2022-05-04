@@ -1,14 +1,16 @@
-require('./models/User');
+require('./models/mongodb/User');
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authRoutes);
+app.use(userRoutes);
 
 const user = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
@@ -28,10 +30,10 @@ const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/$
       console.log('Connected to mongo instance');
     });
 
-    // app.get('/', requireAuth, (req, res) => {
-    //     console.log(req.user);
-    //     res.send(`Your email: ${req.user.email}`);
-    // });
+    app.get('/', requireAuth, (req, res) => {
+      console.log(req.user);
+      res.send(`Your email: ${req.user.email}`);
+    });
 
     const PORT = process.env.PORT || 8080;
 

@@ -35,5 +35,3 @@ require('./JobsHaveBenefits')(sequelize, Job, Benefit);
 require('./CategoriesHaveJobs')(sequelize, Category, Job);
 
 module.exports = sequelize;
-
-
