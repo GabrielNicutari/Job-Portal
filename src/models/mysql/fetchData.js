@@ -1,8 +1,8 @@
-const getUsers = async (User) => {
-    const users = await User.findAll();
-    for (let user of users) {
-        console.log(user)
+const getApplications = async (Application) => {
+    const applications = await Application.findAll();
+    for (let app of applications) {
+        console.log(app.dataValues)
     }
 }
 
-module.exports = getUsers;
+module.exports = getApplications;
