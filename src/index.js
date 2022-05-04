@@ -48,4 +48,4 @@ const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/$
     } catch (error) {
         console.error("Unable to connect to the database:", error.original);
     }
-});
+})();

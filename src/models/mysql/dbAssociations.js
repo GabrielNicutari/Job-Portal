@@ -21,8 +21,8 @@ const sequelize = new Sequelize(
 
 const Application = require('./Application')(sequelize);
 const Benefit = require('./Benefit')(sequelize);
-const Category = require('Category')(sequelize);
-const CategoriesHaveJobs = require('./CategoriesHaveJob')(sequelize);
+const Category = require('./Category')(sequelize);
+const CategoriesHaveJobs = require('./CategoriesHaveJobs')(sequelize);
 const Company = require('./Company')(sequelize);
 const JobStatus = require('./JobStatus')(sequelize);
 const JobType = require('./JobType')(sequelize);
@@ -78,6 +78,12 @@ Application.hasOne(Job, {
         type: DataTypes.INTEGER
     }
 });
+
+Category.belongsToMany(Job, {through: CategoriesHaveJobs});
+Job.belongsToMany(Category, {through: CategoriesHaveJobs});
+
+Job.belongsToMany(Benefit, {through: JobsHaveBenefits});
+Benefit.belongsToMany(Job, {through: JobsHaveBenefits});
 
 // get all users for testing...
 const getApplications = require('./fetchData');
