@@ -9,8 +9,8 @@ router.delete('/user/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
-    const user = db.models.users;
-    const result = await user.destroy({ where: { id: id } });
+    const User = db.models.users;
+    const result = await User.destroy({ where: { id: id } });
 
     if (result === 1) {
       res.send({ message: 'User was deleted successfully!' });
@@ -21,6 +21,25 @@ router.delete('/user/:id', async (req, res) => {
     }
   } catch (e) {
     res.status(500).send({ message: 'Could not delete User with id=' + id });
+  }
+});
+
+router.put('/user/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const User = db.models.users;
+    const result = await User.update(req.body, { where: { id: id } });
+
+    if (result[0] === 1) {
+      res.send({ message: 'User was updated successfully!' });
+    } else {
+      res.send({
+        message: `Cannot update User with id=${id}. Perhaps the User was not found!`
+      });
+    }
+  } catch (e) {
+    res.status(500).send({ message: 'Could not update User with id=' + id });
   }
 });
 
