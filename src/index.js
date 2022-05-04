@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
+const jobRoutes = require('./routes/jobRoutes');
 const userRoutes = require('./routes/userRoutes');
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authRoutes);
 app.use(userRoutes);
+app.use(jobRoutes);
 
 const user = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
