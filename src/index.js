@@ -30,10 +30,10 @@ const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/$
       console.log('Connected to mongo instance');
     });
 
-    // app.get('/', requireAuth, (req, res) => {
-    //     console.log(req.user);
-    //     res.send(`Your email: ${req.user.email}`);
-    // });
+    app.get('/', requireAuth, (req, res) => {
+      console.log(req.user);
+      res.send(`Your email: ${req.user.email}`);
+    });
 
     const PORT = process.env.PORT || 8080;
 
