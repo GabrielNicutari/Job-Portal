@@ -8,7 +8,7 @@ router.post('/application', async (req, res) => {
     await newApplication.save();
     res.status(200).send({ message: 'The application has been added!' });
   } catch {
-    res.status(500).send({ message: 'Could not create a new job!' });
+    res.status(500).send({ message: 'Could not create a new application!' });
   }
 });
 
