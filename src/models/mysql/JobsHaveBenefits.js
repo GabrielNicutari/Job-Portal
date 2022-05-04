@@ -1,25 +1,23 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const JobsHaveBenefits = (sequelize) => {
-  const Job = sequelize.define('Job', {name: DataTypes.STRING});
-  const Benefit = sequelize.define('Benefit', {name: DataTypes.STRING});
-
+const JobsHaveBenefits = (sequelize, Job, Benefit) => {
   return sequelize.define('jobs-have-benefits', {
-    JobId: {
+    job_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       references: {
         model: Job,
-        key: 'id'
+        key: 'id',
       }
     },
-    BenefitId: {
+    benefit_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       references: {
         model: Benefit,
         key: 'id'
       }
     }
   });
-} 
-
+};
 module.exports = JobsHaveBenefits;

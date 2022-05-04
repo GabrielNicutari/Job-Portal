@@ -1,8 +1,8 @@
 const {DataTypes} = require('sequelize');
 
-const Application = (sequelize) => {
+const Application = (sequelize, Job, User) => {
     return sequelize.define(
-        "applications",
+        'applications',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -10,29 +10,43 @@ const Application = (sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            email: {
-                type: DataTypes.STRING(1000),
-                allowNull: false,
-            },
-            full_name: {
-              type: DataTypes.STRING(1000),
-              allowNull: false,
-            },
-            linkedin_url: {
-              type: DataTypes.STRING(2000),
-              allowNull: true,
-            },
-            phone_number: {
-              type: DataTypes.STRING(20),
-              allowNull: false,
+            job_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Job,
+                    key: 'id'
+                }
             },
             resume: {
                 type: DataTypes.BLOB,
                 allowNull: true,
             },
+            email: {
+                type: DataTypes.STRING(1000),
+                allowNull: false,
+            },
+            full_name: {
+                type: DataTypes.STRING(1000),
+                allowNull: false,
+            },
+            user_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: User,
+                    key: 'id'
+                }
+            },
+            linkedin_url: {
+                type: DataTypes.STRING(2000),
+                allowNull: true
+            },
+            phone_number: {
+                type: DataTypes.STRING(20),
+                allowNull: false,
+            }
         },
         {
-            timestamps: false
+            // options
         }
     );
 }
