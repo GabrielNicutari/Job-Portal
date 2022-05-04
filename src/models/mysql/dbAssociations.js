@@ -2,8 +2,7 @@ dbConfig = require('../../database/config');
 const {Sequelize} = require('sequelize');
 require('dotenv').config();
 const isDevelopment = process.env.NODE_ENV === 'development';
-let config;
-config = isDevelopment ? dbConfig.development : dbConfig.production;
+const config = isDevelopment ? dbConfig.development : dbConfig.production;
 const sequelize = new Sequelize(
     config.database,
     config.username,
