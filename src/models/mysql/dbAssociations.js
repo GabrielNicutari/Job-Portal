@@ -20,16 +20,15 @@ const sequelize = new Sequelize(
     });
 
 const Application = require('./Application')(sequelize);
-// const Benefit = require('Benefits')(sequelize);
-// const Category = require('Categories')(sequelize);
-// const CategoryHasJobs = require(CategoryHasJob)(sequelize);
+const Benefit = require('./Benefit')(sequelize);
+const Category = require('Category')(sequelize);
+const CategoriesHaveJobs = require('./CategoriesHaveJob')(sequelize);
 const Company = require('./Company')(sequelize);
 const JobStatus = require('./JobStatus')(sequelize);
 const JobType = require('./JobType')(sequelize);
 const Job = require('./Job')(sequelize);
-// const JobHasBenefits = require('./JobHasBenefits')(sequelize);
+const JobsHaveBenefits = require('./JobsHaveBenefits')(sequelize);
 const Role = require('./Role')(sequelize);
-// const RoleHasJobs = require('./RoleHasJobs')(sequelize);
 const User = require('./User')(sequelize);
 
 // create associations
