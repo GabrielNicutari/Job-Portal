@@ -1,26 +1,23 @@
-const { DataTypes } = require("sequelize/types");
-const sequelize = require("./dbAssociations");
+const { DataTypes } = require('sequelize');
 
-const Job = sequelize.define('Job', {name: DataTypes.STRING});
-const Benefit = sequelize.define('Benefit', {name: DataTypes.STRING});
-
-//NOT TESTED YET
-
-const JobsHaveBenefits = sequelize.define('jobs-have-benefits', {
-  JobId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Job,
-      key: 'id'
+const JobsHaveBenefits = (sequelize, Job, Benefit) => {
+  return sequelize.define('jobs-have-benefits', {
+    job_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      references: {
+        model: Job,
+        key: 'id',
+      }
+    },
+    benefit_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      references: {
+        model: Benefit,
+        key: 'id'
+      }
     }
-  },
-  BenefitId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Category,
-      key: 'id'
-    }
-  }
-});
-Job.belongsToMany(Benefit, {through: JobsHaveBenefits});
-Benefit.belongsToMany(Job, {through: JobsHaveBenefits});
+  });
+};
+module.exports = JobsHaveBenefits;

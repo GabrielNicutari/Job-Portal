@@ -2,7 +2,7 @@ const {DataTypes} = require('sequelize');
 
 const JobStatus = (sequelize) => {
     return sequelize.define(
-        "job_statuses",
+        'job-statuses',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -16,7 +16,7 @@ const JobStatus = (sequelize) => {
             },
         },
         {
-            timestamps: false
+            // options
         }
     );
 }

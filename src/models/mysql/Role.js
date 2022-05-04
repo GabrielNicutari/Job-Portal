@@ -2,7 +2,7 @@ const {DataTypes} = require('sequelize');
 
 const Role = (sequelize) => {
     return sequelize.define(
-        "roles",
+        'roles',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -11,13 +11,12 @@ const Role = (sequelize) => {
                 primaryKey: true,
             },
             name: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(50),
                 allowNull: false,
-                unique: true,
-            },
+            }
         },
         {
-            timestamps: false
+            // options
         }
     );
 }

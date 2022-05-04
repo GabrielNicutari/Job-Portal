@@ -1,8 +1,8 @@
 const {DataTypes} = require('sequelize');
 
-const Company = (sequelize) => {
+const Company = (sequelize, User) => {
     return sequelize.define(
-        "companies",
+        'companies',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -11,11 +11,11 @@ const Company = (sequelize) => {
                 primaryKey: true,
             },
             city: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(50),
                 allowNull: false,
             },
             logo: {
-                type: DataTypes.STRING,
+                type: DataTypes.BLOB,
                 allowNull: false,
             },
             name: {
@@ -26,13 +26,20 @@ const Company = (sequelize) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
+            user_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: User,
+                    key: 'id'
+                }
+            },
             website_url: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(2000),
                 allowNull: false,
             },
         },
         {
-            timestamps: false
+            // options
         }
     );
 }

@@ -2,7 +2,7 @@ const {DataTypes} = require('sequelize');
 
 const Category = (sequelize) => {
     return sequelize.define(
-        "categories",
+        'categories',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -11,12 +11,12 @@ const Category = (sequelize) => {
                 primaryKey: true,
             },
             name: {
-                type: DataTypes.STRING(50),
+                type: DataTypes.STRING(255),
                 allowNull: false,
             }
         },
         {
-            timestamps: false
+            // options
         }
     );
 }
