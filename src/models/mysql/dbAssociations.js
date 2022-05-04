@@ -88,7 +88,7 @@ Benefit.belongsToMany(Job, {through: JobsHaveBenefits});
 // get all users for testing...
 const getApplications = require('./fetchData');
 // getUsers(User).then(r => console.log('success', r)).catch((err) => console.log(err));
-getApplications(Application).then(r => console.log('success', r)).catch((err) => console.log(err));
+// getApplications(Application).then(r => console.log('success', r)).catch((err) => console.log(err));
 
 module.exports = sequelize;
 
