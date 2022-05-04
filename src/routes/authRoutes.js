@@ -14,11 +14,12 @@ router.post('/signup', async (req, res) => {
     const authUser = new AuthUser({ email, password, username });
     await authUser.save();
 
-    await db.query(
+    const result = await db.query(
       `call job_portal.add_user(\'${email}\', \'${username}\', ${role_id});`,
-      { type: QueryTypes.INSERT }
+      { type: QueryTypes.RAW }
     );
-    //const users = await user.create({ email, username, role_id });
+
+    console.log(result[0].user_id);
 
     const token = jwt.sign({ authUserId: authUser._id }, 'MY_SECRET_KEY');
     res.send({ token });

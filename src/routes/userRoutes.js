@@ -32,6 +32,7 @@ router.put('/user/:id', async (req, res) => {
     const result = await User.update(req.body, { where: { id: id } });
 
     if (result[0] === 1) {
+      //Number of affected rows
       res.send({ message: 'User was updated successfully!' });
     } else {
       res.send({
