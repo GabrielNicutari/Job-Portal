@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const jobRoutes = require('./routes/jobRoutes');
 const userRoutes = require('./routes/userRoutes');
+const applicationRoutes = require('./routes/applicationRoutes');
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
 const app = express();
@@ -12,7 +13,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authRoutes);
 app.use(userRoutes);
-app.use(jobRoutes);
+app.use(jobRoutes)
+app.use(applicationRoutes);
 
 const user = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
