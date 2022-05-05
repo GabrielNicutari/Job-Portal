@@ -1,15 +1,12 @@
 dbConfig = require('../../database/config');
 const {Sequelize} = require('sequelize');
-require('dotenv').config();
-const isDevelopment = process.env.NODE_ENV === 'development';
-const config = isDevelopment ? dbConfig.development : dbConfig.production;
 const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
+    dbConfig.database,
+    dbConfig.username,
+    dbConfig.password,
     {
-        host: config.host,
-        dialect: config.dialect,
+        host: dbConfig.host,
+        dialect: dbConfig.dialect,
         define: {
             timestamps: false,
         },
