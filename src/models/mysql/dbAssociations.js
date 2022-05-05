@@ -23,6 +23,15 @@ const sequelize = new Sequelize(
 
 const Role = require('./Role')(sequelize);
 const User = require('./User')(sequelize);
+const Benefit = require('./Benefit')(sequelize);
+const JobStatus = require('./JobStatus')(sequelize);
+const JobType = require('./JobType')(sequelize);
+const Category = require('./Category')(sequelize);
+const Job = require('./Job')(sequelize);
+const Application = require('./Application')(sequelize);
+const Company = require('./Company')(sequelize);
+const JobsHaveBenefits = require('./JobsHaveBenefits')(sequelize, Job, Benefit);
+const CategoriesHaveJobs = require('./CategoriesHaveJobs')(sequelize, Category, Job);
 
 // 1 : Many Role - User
 Role.hasMany(User,{
@@ -32,23 +41,13 @@ User.belongsTo(Role,{
     foreignKey: 'role_id'
 });
 
-const Company = require('./Company')(sequelize);
-// 1 : 1 User - Company
-User.hasMany(Company,{
+// 1 : One User - Company
+User.hasOne(Company,{
     foreignKey: 'user_id'
 });
 Company.belongsTo(User,{
     foreignKey: 'user_id'
 });
-
-const Benefit = require('./Benefit')(sequelize);
-const JobStatus = require('./JobStatus')(sequelize);
-const JobType = require('./JobType')(sequelize);
-const Category = require('./Category')(sequelize);
-const Job = require('./Job')(sequelize);
-const JobsHaveBenefits = require('./JobsHaveBenefits')(sequelize, Job, Benefit);
-const CategoriesHaveJobs = require('./CategoriesHaveJobs')(sequelize, Category, Job);
-const Application = require('./Application')(sequelize);
 
 // Many : Many Jobs - Benefits
 Job.belongsToMany(Benefit, { through: JobsHaveBenefits, foreignKey: 'job_id' });
