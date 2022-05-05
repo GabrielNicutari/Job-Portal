@@ -1,6 +1,6 @@
 const {DataTypes} = require('sequelize');
 
-const Job = (sequelize, Company, JobStatus, JobType) => {
+const Job = (sequelize) => {
     return sequelize.define(
         'jobs',
         {
@@ -13,13 +13,6 @@ const Job = (sequelize, Company, JobStatus, JobType) => {
             city: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            },
-            company_id: {
-                type: DataTypes.INTEGER,
-                references: {
-                    model: Company,
-                    key: 'id'
-                }
             },
             date_created: {
                 type: DataTypes.DATE,
@@ -36,20 +29,6 @@ const Job = (sequelize, Company, JobStatus, JobType) => {
             title: {
                 type: DataTypes.STRING(200),
                 allowNull: false,
-            },
-            job_status_id: {
-                type: DataTypes.INTEGER,
-                references: {
-                    model: JobStatus,
-                    key: 'id'
-                }
-            },
-            job_type_id: {
-                type: DataTypes.INTEGER,
-                references: {
-                    model: JobType,
-                    key: 'id'
-                }
             }
         },
         {

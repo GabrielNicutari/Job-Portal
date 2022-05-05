@@ -1,6 +1,6 @@
 const {DataTypes} = require('sequelize');
 
-const Company = (sequelize, User) => {
+const Company = (sequelize) => {
     return sequelize.define(
         'companies',
         {
@@ -25,13 +25,6 @@ const Company = (sequelize, User) => {
             number_of_employees: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-            },
-            user_id: {
-                type: DataTypes.INTEGER,
-                references: {
-                    model: User,
-                    key: 'id'
-                }
             },
             website_url: {
                 type: DataTypes.STRING(2000),

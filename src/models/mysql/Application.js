@@ -1,6 +1,6 @@
 const {DataTypes} = require('sequelize');
 
-const Application = (sequelize, Job, User) => {
+const Application = (sequelize) => {
     return sequelize.define(
         'applications',
         {
@@ -9,13 +9,6 @@ const Application = (sequelize, Job, User) => {
                 autoIncrement: true,
                 allowNull: false,
                 primaryKey: true,
-            },
-            job_id: {
-                type: DataTypes.INTEGER,
-                references: {
-                    model: Job,
-                    key: 'id'
-                }
             },
             resume: {
                 type: DataTypes.BLOB,
@@ -28,13 +21,6 @@ const Application = (sequelize, Job, User) => {
             full_name: {
                 type: DataTypes.STRING(1000),
                 allowNull: false,
-            },
-            user_id: {
-                type: DataTypes.INTEGER,
-                references: {
-                    model: User,
-                    key: 'id'
-                }
             },
             linkedin_url: {
                 type: DataTypes.STRING(2000),
