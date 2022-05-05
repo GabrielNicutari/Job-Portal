@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -6,6 +7,8 @@ const db = require('../models/mysql/dbAssociations');
 const { QueryTypes } = require('sequelize');
 
 const router = express.Router();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/signup', async (req, res) => {
   const { email, password, username, role_id } = req.body;
@@ -21,7 +24,7 @@ router.post('/signup', async (req, res) => {
 
     console.log(result[0].user_id);
 
-    const token = jwt.sign({ authUserId: authUser._id }, 'MY_SECRET_KEY');
+    const token = jwt.sign({ authUserId: authUser._id }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
     return res.status(422).send(e.message); // invalid data
@@ -41,7 +44,7 @@ router.post('/signin', async (req, res) => {
 
   try {
     await authUser.comparePassword(password);
-    const token = jwt.sign({ authUserId: authUser._id }, 'MY_SECRET_KEY');
+    const token = jwt.sign({ authUserId: authUser._id }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
     return res.status(401).send({ error: 'Invalid password or email' });
