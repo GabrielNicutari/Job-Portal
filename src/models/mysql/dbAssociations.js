@@ -39,7 +39,7 @@ User.belongsTo(Role,{
 });
 
 // 1 : One User - Company
-User.hasOne(Company,{
+User.hasMany(Company,{
     foreignKey: 'user_id'
 });
 Company.belongsTo(User,{
