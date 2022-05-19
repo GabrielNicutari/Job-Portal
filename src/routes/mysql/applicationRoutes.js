@@ -45,6 +45,19 @@ router.put('/mysql/application/:applicationId', async (req, res) => {
         });
 });
 
+router.delete('/mysql/application/:applicationId', async (req, res) => {
+    db.models.applications.destroy({where: {id: {[Op.eq]: Number(req.params.applicationId)}}})
+        .then(() => {
+            res.send('Application was deleted successfully');
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while updating the application"
+            });
+        });
+});
+
 module.exports = router;
 
 const getPagination = (page, size) => {
