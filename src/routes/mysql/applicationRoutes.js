@@ -16,10 +16,10 @@ router.post('/mysql/application', async (req, res) => {
 });
 
 router.get('/mysql/application', async (req, res) => {
-    const { page, size, email } = req.query;
-    const condition = email ? { email: { [Op.like]: `%${email}%` } } : null;
-    const { limit, offset } = getPagination(page, size);
-    db.models.applications.findAndCountAll({ where: condition, limit, offset })
+    const {page, size, email} = req.query;
+    const condition = email ? {email: {[Op.like]: `%${email}%`}} : null;
+    const {limit, offset} = getPagination(page, size);
+    db.models.applications.findAndCountAll({where: condition, limit, offset})
         .then(data => {
             const response = getPagingData(data, page, limit);
             res.send(response);
@@ -32,17 +32,30 @@ router.get('/mysql/application', async (req, res) => {
         });
 });
 
+router.put('/mysql/application/:applicationId', async (req, res) => {
+    db.models.applications.update({phone_number: req.body.phone}, {where: {id: {[Op.eq]: Number(req.params.applicationId)}}})
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while updating the application"
+            });
+        });
+});
+
 module.exports = router;
 
 const getPagination = (page, size) => {
     const limit = size ? +size : 3;
     const offset = page ? page * limit : 0;
-    return { limit, offset };
+    return {limit, offset};
 };
 
 const getPagingData = (data, page, limit) => {
-    const { count: totalItems, rows: tutorials } = data;
+    const {count: totalItems, rows: tutorials} = data;
     const currentPage = page ? +page : 0;
     const totalPages = Math.ceil(totalItems / limit);
-    return { totalItems, tutorials, totalPages, currentPage };
+    return {totalItems, tutorials, totalPages, currentPage};
 };
