@@ -8,6 +8,7 @@ const userRoutes = require('./routes/userRoutes');
 const applicationRoutes = require('./routes/mysql/applicationRoutes');
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
+const neo4jDriver = require('../src/database/neo4jConfig');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -43,7 +44,12 @@ const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/$
 
     console.log('Testing mysql connection..');
     await db.authenticate();
-    console.log('Connection to mysql established successfully.');
+    console.log('Connected to MySQL instance');
+
+    const neo4jSession = neo4jDriver.session();
+    console.log('Connected to neo4j instance');
+    await neo4jSession.close();
+    await neo4jDriver.close();
 
     app.listen(PORT, (error) => {
       if (error) {
