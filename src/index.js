@@ -2,20 +2,22 @@ require('./models/mongodb/User');
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const authRoutes = require('./routes/authRoutes');
-const jobRoutes = require('./routes/jobRoutes');
-const userRoutes = require('./routes/userRoutes');
-const applicationRoutes = require('./routes/mysql/applicationRoutes');
+const mongoAuthRoutes = require('./routes/mongodb/authRoutes');
+const jobRoutes = require('./routes/mysql/jobRoutes');
+const userRoutes = require('./routes/mysql/userRoutes');
+const mySQLApplicationRoutes = require('./routes/mysql/applicationRoutes');
+const neo4jApplicationRoutes = require('./routes/neo4j/applicationRoutes');
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
 const neo4jDriver = require('../src/database/neo4jConfig');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(authRoutes);
+app.use(mongoAuthRoutes);
 app.use(userRoutes);
-app.use(jobRoutes)
-app.use(applicationRoutes);
+app.use(jobRoutes);
+app.use(mySQLApplicationRoutes);
+app.use(neo4jApplicationRoutes);
 
 const user = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
@@ -49,7 +51,6 @@ const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/$
     const neo4jSession = neo4jDriver.session();
     console.log('Connected to neo4j instance');
     await neo4jSession.close();
-    await neo4jDriver.close();
 
     app.listen(PORT, (error) => {
       if (error) {

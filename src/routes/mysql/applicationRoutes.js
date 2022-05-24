@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../models/mysql/dbAssociations');
-const {Op} = require("sequelize");
+const { Op } = require("sequelize");
+const { getPagination, getPagingData } = require('../helperFunctions')
 
 router.post('/mysql/application', async (req, res) => {
     try {
@@ -59,16 +60,3 @@ router.delete('/mysql/application/:applicationId', async (req, res) => {
 });
 
 module.exports = router;
-
-const getPagination = (page, size) => {
-    const limit = size ? +size : 3;
-    const offset = page ? page * limit : 0;
-    return {limit, offset};
-};
-
-const getPagingData = (data, page, limit) => {
-    const {count: totalItems, rows: tutorials} = data;
-    const currentPage = page ? +page : 0;
-    const totalPages = Math.ceil(totalItems / limit);
-    return {totalItems, tutorials, totalPages, currentPage};
-};

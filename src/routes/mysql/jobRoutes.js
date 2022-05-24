@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../models/mysql/dbAssociations');
+const db = require('../../models/mysql/dbAssociations');
 const { QueryTypes } = require('sequelize');
 
 router.post('/job', async (req, res) => {
