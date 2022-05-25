@@ -6,8 +6,7 @@ const { getPagination, getPagingData } = require('../helperFunctions')
 
 router.post('/mysql/application', async (req, res) => {
     try {
-        let newApplication = {...req.body};
-        const savedApplication = await db.models.applications.create(newApplication);
+        const savedApplication = await db.models.applications.create({...req.body, created_at: new Date()});
         if (savedApplication) {
             res.status(200).send(savedApplication);
         }
