@@ -30,10 +30,6 @@ const Application = (sequelize) => {
                 type: DataTypes.STRING(20),
                 allowNull: false,
             },
-            created_at: {
-                type: DataTypes.DATE,
-                allowNull: false,
-            }
         },
         {
             // options

@@ -6,7 +6,7 @@ const { getPagination, getPagingData } = require('../helperFunctions')
 
 router.post('/mysql/application', async (req, res) => {
     try {
-        let newApplication = {...req.body, created_at: new Date()}
+        let newApplication = {...req.body};
         const savedApplication = await db.models.applications.create(newApplication);
         if (savedApplication) {
             res.status(200).send(savedApplication);
@@ -20,9 +20,10 @@ router.get('/mysql/application', async (req, res) => {
     const {page, size, email} = req.query;
     const condition = email ? {email: {[Op.like]: `%${email}%`}} : null;
     const {limit, offset} = getPagination(page, size);
-    db.models.applications.findAndCountAll({where: condition, limit, offset})
+    db.models.applications.findAndCountAll({where: condition, limit, offset,})
         .then(data => {
             const response = getPagingData(data, page, limit);
+            console.log('response = ', response);
             res.send(response);
         })
         .catch(err => {
