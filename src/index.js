@@ -7,6 +7,7 @@ const jobRoutes = require('./routes/mysql/jobRoutes');
 const userRoutes = require('./routes/mysql/userRoutes');
 const mySQLApplicationRoutes = require('./routes/mysql/applicationRoutes');
 const neo4jApplicationRoutes = require('./routes/neo4j/applicationRoutes');
+const neo4jJobRoutes = require('./routes/neo4j/jobRoutes');
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
 const neo4jDriver = require('../src/database/neo4jConfig');
@@ -18,6 +19,7 @@ app.use(userRoutes);
 app.use(jobRoutes);
 app.use(mySQLApplicationRoutes);
 app.use(neo4jApplicationRoutes);
+app.use(neo4jJobRoutes);
 
 const user = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;

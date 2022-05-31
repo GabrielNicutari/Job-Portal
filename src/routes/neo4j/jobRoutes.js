@@ -1,23 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const applicationModel = require('../../models/neo4j/Application');
+const jobModel = require('../../models/neo4j/Job');
 const { getPagination, getPagingData } = require('../helperFunctions');
 
-router.get('/neo4j/application', async (req, res) => {
-    let {page, size, email} = req.query;
-    if (!email) {
-        email = '';
-    }
+router.get('/neo4j/job', async (req, res) => {
+    let {page, size, city, category} = req.query;
     const {limit, offset} = getPagination(page, size);
-    const result = await applicationModel.findAll(email, limit, offset);
+    const result = await jobModel.findAll(city, category, limit, offset);
     res.json(result);
 });
 
-router.post('/neo4j/application', async (req, res) => {
-    let newApplication = {...req.body, createdAt: new Date()}
-    const result = await applicationModel.create(newApplication);
-    res.json(result);
-});
+//
+// router.post('/neo4j/application', async (req, res) => {
+//     let newApplication = {...req.body, createdAt: new Date()}
+//     const result = await applicationModel.create(newApplication);
+//     res.json(result);
+// });
 
 // router.put('/neo4j/application/:applicationId', async (req, res) => {
 //     db.models.applications.json.update({phone_number: req.body.phone}, {where: {id: {[Op.eq]: Number(req.params.applicationId)}}})

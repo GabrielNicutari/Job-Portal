@@ -21,11 +21,28 @@ const findAll = async (email, limit, offset) => {
 //     return result.records[0].get('u').properties
 // }
 //
-// const create = async (user) =>{
-//     const unique_id = nanoid(8)
-//     await session.run(`CREATE (u:User {_id : '${unique_id}', name: '${user.name}', email: '${user.email}', password: '${user.password}'} ) return u`)
-//     return await findById(unique_id)
-// }
+
+const create = async (application) =>{
+    const session = neo4jDriver.session({database: 'neo4j'});
+    try {
+        await session.readTransaction(tx => {
+            const query =
+                `MATCH (j:Job) WHERE id(j) = ${Number(application.job_id)}
+                 MATCH (u:User) WHERE id(u) = ${Number(application.user_id)}
+                 CREATE (a:Application { resume: "${application.resume}", email: "${application.email}",
+                  fullName: "${application.full_name}", linkedinUrl: "${application.linkedin_url}",
+                   phoneNUmber: "${application.phone_number}" }),
+                 (u)-[:SUBMITTED]->(a), (j)-[:HAS_APPLICATION]->(a) RETURN a`;
+            tx.run(query);
+        });
+        return 'Saved successfully.';
+    } catch (error) {
+        return 'Something went wrong.';
+    } finally {
+        await session.close();
+    }
+}
+
 //
 // const findByIdAndUpdate = async (id, user) =>{
 //     const result = await session.run(`MATCH (u:User {_id : '${id}'}) SET u.name= '${user.name}', u.email= '${user.email}', u.password= '${user.password}' return u`)
@@ -40,7 +57,7 @@ const findAll = async (email, limit, offset) => {
 module.exports = {
     findAll,
     // findById,
-    // create,
+    create,
     // findByIdAndUpdate,
     // findByIdAndDelete
 }
