@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const AuthUser = mongoose.model('User');
-const db = require('../models/mysql/dbAssociations');
+const db = require('../../models/mysql/dbAssociations');
 const { QueryTypes } = require('sequelize');
 
 const router = express.Router();

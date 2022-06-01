@@ -29,6 +29,9 @@ const Application = (sequelize) => {
             phone_number: {
                 type: DataTypes.STRING(20),
                 allowNull: false,
+            },
+            created_at: {
+                type: DataTypes.DATE,
             }
         },
         {
