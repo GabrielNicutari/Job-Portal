@@ -15,9 +15,7 @@ const Category = (sequelize) => {
                 allowNull: false,
             }
         },
-        {
-            // options
-        }
+        { timestamps: false }
     );
 }
 
