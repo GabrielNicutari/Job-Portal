@@ -5,6 +5,7 @@ const UserModel = mongoose.model('User');
 const ObjectId = require('mongodb').ObjectId;
 
 const express = require('express');
+const {getPagination} = require("../helperFunctions");
 const router = express.Router();
 
 router.post('/mongo/application/:jobId', async (req, res) => {
@@ -21,9 +22,21 @@ router.post('/mongo/application/:jobId', async (req, res) => {
     }
     const newApplication = new ApplicationModel({ job, resume, fullName, phoneNumber, email, linkedinUrl, user });
     const savedApplication = await newApplication.save();
-    res.send('Application was successfully saved');
-  } catch (e) {
-    return res.status(422).send(e.message);
+    res.send({ message: 'Application is saved', savedApplication });
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+});
+
+router.get('/mongo/application', async (req, res) => {
+  try {
+    const { page, size } = req.query;
+    const { limit, offset } = getPagination(page, size);
+    console.log('limit, offset = ', limit, offset);
+    const applications = await ApplicationModel.find().skip(offset).limit(limit);
+    res.send(applications);
+  } catch (err) {
+    return res.status(500).send(err.message);
   }
 });
 
