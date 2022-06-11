@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../models/mysql/dbAssociations');
+const {getPagination} = require("../helperFunctions");
 
-router.post('/job', async (req, res) => {
+router.post('/jobs', async (req, res) => {
   const date = new Date();
   // start a transaction because we need to execute multiple queries for this endpoint
   
@@ -55,9 +56,12 @@ const replaceForeignKeysWithValues = async (job, t) => {
 }
 
 router.get('/jobs', async (req, res) => {
+  const {page, size} = req.query;
+  const {limit, offset} = getPagination(page, size);
+
   const t = await db.transaction();
   try {
-    let jobs = await db.models.jobs.findAll({limit: 100}, {transaction: t});
+    let jobs = await db.models.jobs.findAll({offset: offset, limit: limit}, {transaction: t});
     if (jobs && jobs.length) {
       for (let job of jobs) {
         await replaceForeignKeysWithValues(job, t);
@@ -76,7 +80,7 @@ router.get('/jobs', async (req, res) => {
   }
 });
 
-router.get('/job/:id', async (req, res) => { 
+router.get('/jobs/:id', async (req, res) => { 
   const t = await db.transaction();
   try {
     const job = await db.models.jobs.findOne({where: {id: req.params.id}}, {transaction: t});
@@ -102,7 +106,8 @@ const patchJobHasBenefits = async (jobId, benefits, t) => {
   }
 };
 
-router.patch('/job/:id', async (req, res) => {
+router.patch('/jobs/:id', async (req, res) => {
+  console.log(req.params.id)
   const t = await db.transaction();
   try {
     let isJobUpdated = await db.models.jobs.update(req.body.job, {where: {id: req.params.id}}, {transaction: t});
@@ -128,7 +133,7 @@ router.patch('/job/:id', async (req, res) => {
   }
 });
 
-router.delete('/job/:id', async (req, res) => {
+router.delete('/jobs/:id', async (req, res) => {
   const t = await db.transaction();
   try {
     const isDeleted = await db.models.jobs.destroy({where: {id: req.params.id}}, {transaction: t});

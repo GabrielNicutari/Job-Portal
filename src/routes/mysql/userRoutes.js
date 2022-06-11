@@ -3,7 +3,7 @@ const db = require('../../models/mysql/dbAssociations');
 const requireAuth = require('../../middlewares/requireAuth');
 
 const router = express.Router();
-router.use(requireAuth);
+// router.use(requireAuth);
 
 router.delete('/user/:id', async (req, res) => {
   const id = req.params.id;
