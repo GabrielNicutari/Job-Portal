@@ -2,6 +2,7 @@ require('./models/mongodb/User');
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const mongoUri = require('./database/mongoConfig');
 const mongoAuthRoutes = require('./routes/mongodb/authRoutes');
 const jobRoutes = require('./routes/mysql/jobRoutes');
 const userRoutes = require('./routes/mysql/userRoutes');
@@ -20,12 +21,6 @@ app.use(jobRoutes);
 app.use(mySQLApplicationRoutes);
 app.use(neo4jApplicationRoutes);
 app.use(neo4jJobRoutes);
-
-const user = process.env.MONGO_USERNAME;
-const password = process.env.MONGO_PASSWORD;
-const database = process.env.MONGO_DATABASE;
-
-const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/${database}?retryWrites=true&w=majority`;
 
 (initApp = async () => {
   try {
