@@ -1,10 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../models/mysql/dbAssociations');
-const { QueryTypes } = require('sequelize');
-const JobsHaveBenefits = require('../models/mysql/JobsHaveBenefits');
-const Job = require('../models/mysql/Job');
-const { route } = require('express/lib/application');
 
 router.post('/job', async (req, res) => {
   const date = new Date();
