@@ -1,24 +1,45 @@
-require('./models/mongodb/User');
+const fs = require('fs');
+const models_path = __dirname + '/models/mongo'
+fs.readdirSync(models_path).forEach(function (file) {
+  require(models_path + '/' + file);
+})
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const mongoUri = require('./database/mongoConfig');
+
+// mongo routes
 const mongoAuthRoutes = require('./routes/mongodb/authRoutes');
-const jobRoutes = require('./routes/mysql/jobRoutes');
-const userRoutes = require('./routes/mysql/userRoutes');
-const mySQLApplicationRoutes = require('./routes/mysql/applicationRoutes');
+const mongoApplicationRoutes = require('./routes/mongodb/applicationRoutes');
+
+// mysql routes
+const mysqlJobRoutes = require('./routes/mysql/jobRoutes');
+const mysqlUserRoutes = require('./routes/mysql/userRoutes');
+const mysqlApplicationRoutes = require('./routes/mysql/applicationRoutes');
+
+// neo4j routes
 const neo4jApplicationRoutes = require('./routes/neo4j/applicationRoutes');
 const neo4jJobRoutes = require('./routes/neo4j/jobRoutes');
+
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
 const neo4jDriver = require('../src/database/neo4jConfig');
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// mongo
 app.use(mongoAuthRoutes);
-app.use(userRoutes);
-app.use(jobRoutes);
-app.use(mySQLApplicationRoutes);
+app.use(mongoApplicationRoutes);
+
+// mysql
+app.use(mysqlUserRoutes);
+app.use(mysqlJobRoutes);
+app.use(mysqlApplicationRoutes);
+
+// neo4j
 app.use(neo4jApplicationRoutes);
 app.use(neo4jJobRoutes);
 

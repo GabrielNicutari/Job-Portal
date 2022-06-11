@@ -1,15 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../models/mysql/dbAssociations');
-const { QueryTypes } = require('sequelize');
-const JobsHaveBenefits = require('../models/mysql/JobsHaveBenefits');
-const Job = require('../models/mysql/Job');
-const { route } = require('express/lib/application');
 
 router.post('/job', async (req, res) => {
   const date = new Date();
   // start a transaction because we need to execute multiple queries for this endpoint
-  
+
   const job = req.body.job;
   const addJobQuery = `call job_portal.add_job(
     "${job.title}", 
@@ -39,7 +35,7 @@ router.post('/job', async (req, res) => {
       await t.rollback();
       res.status(500).send({ message: 'Something went wrong' });
     }
-    
+
   } catch (error) {
     console.log(error);
     await t.rollback();
@@ -80,7 +76,7 @@ router.get('/jobs', async (req, res) => {
   }
 });
 
-router.get('/job/:id', async (req, res) => { 
+router.get('/job/:id', async (req, res) => {
   const t = await db.transaction();
   try {
     const job = await db.models.jobs.findOne({where: {id: req.params.id}}, {transaction: t});
@@ -124,7 +120,7 @@ router.patch('/job/:id', async (req, res) => {
       await t.rollback();
       res.status(500).send({ message: 'The job does not exist' });
     }
-    
+
   } catch (error) {
     console.log(error);
     await t.rollback();
