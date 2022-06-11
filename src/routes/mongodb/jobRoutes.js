@@ -1,13 +1,11 @@
-const mongoose = require('mongoose');
 const {getPagination} = require("../helperFunctions");
 const JobModel = require('../../models/mongodb/Job');
-// const ObjectId = require('mongodb').ObjectId;
 
 const express = require('express');
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectId;
 
-router.get('/mongo/jobs', async (req, res) => {
+router.get('/jobs', async (req, res) => {
   const { page, size } = req.query;
   const {limit, offset} = getPagination(page, size);
   try {
@@ -18,7 +16,7 @@ router.get('/mongo/jobs', async (req, res) => {
   }
 });
 
-router.get('/mongo/jobs/:id', async (req, res) => {
+router.get('/jobs/:id', async (req, res) => {
   try {
     const job = await JobModel.findById(new ObjectId(req.params.id));
     res.status(200).send(job);
@@ -27,7 +25,7 @@ router.get('/mongo/jobs/:id', async (req, res) => {
   }
 });
 
-router.post('/mongo/jobs', async (req, res) => {
+router.post('/jobs', async (req, res) => {
   const newJob = new JobModel({
     jobTitle: req.body.title,
     jobCity: req.body.city,
@@ -51,7 +49,7 @@ router.post('/mongo/jobs', async (req, res) => {
     })
 });
 
-router.patch('/mongo/jobs/:id', async (req, res) => {
+router.patch('/jobs/:id', async (req, res) => {
   try {
     const updatedJob = await JobModel.findByIdAndUpdate(new ObjectId(req.params.id), req.body, {new: true});
     res.status(200).send({message: "Job Updated", job: updatedJob})
@@ -60,7 +58,7 @@ router.patch('/mongo/jobs/:id', async (req, res) => {
   }
 });
 
-router.delete('/mongo/jobs/:id', async (req, res) => {
+router.delete('/jobs/:id', async (req, res) => {
   try {
     const removedJob = await JobModel.findByIdAndDelete(new ObjectId(req.params.id));
     res.status(200).send({message: "Job Removed", job: removedJob})

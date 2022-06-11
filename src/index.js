@@ -29,7 +29,6 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(mongoJobRoutes);
 
 app.use('/mysql', mysqlAuthRoutes);
 app.use('/mongo', mongoAuthRoutes);
@@ -39,16 +38,14 @@ app.use('/mysql', mysqlUserRoutes);
 app.use('/mysql', mysqlJobRoutes);
 app.use('/mysql', mysqlApplicationRoutes);
 
+app.use('/mongo', mongoJobRoutes);
+
 app.use('/neo4j', neo4jApplicationRoutes);
 app.use('/neo4j', neo4jJobRoutes);
 
 const user = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
 const database = process.env.MONGO_DATABASE;
-
-// app.use(neo4jApplicationRoutes);
-// app.use(neo4jJobRoutes);
-
 
 (initApp = async () => {
   try {
@@ -69,13 +66,13 @@ const database = process.env.MONGO_DATABASE;
 
     const PORT = process.env.PORT || 8080;
 
-    // console.log('Testing mysql connection..');
-    // await db.authenticate();
-    // console.log('Connected to MySQL instance');
+    console.log('Testing mysql connection..');
+    await db.authenticate();
+    console.log('Connected to MySQL instance');
 
-    // const neo4jSession = neo4jDriver.session();
-    // console.log('Connected to neo4j instance');
-    // await neo4jSession.close();
+    const neo4jSession = neo4jDriver.session();
+    console.log('Connected to neo4j instance');
+    await neo4jSession.close();
 
     app.listen(PORT, (error) => {
       if (error) {
