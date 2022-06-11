@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const companySchema = require('./Company');
 const benefitSchema = require('./Benefit');
-const categoriesSchema = require('./Categories');
+const categoriesSchema = require('./Category');
 
 const jobSchema = new mongoose.Schema({
   jobTitle: {
@@ -27,7 +27,8 @@ const jobSchema = new mongoose.Schema({
   jobDateCreated: {
     type: Date,
     trim: true,
-    required: true
+    required: true,
+    default: Date.now()
   },
   jobStatus: {
     type: String,
@@ -44,4 +45,4 @@ const jobSchema = new mongoose.Schema({
   categories: [categoriesSchema]
 });
 
-mongoose.model('Job', jobSchema);
+module.exports = mongoose.model('Job', jobSchema);
