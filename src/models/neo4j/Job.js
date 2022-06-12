@@ -5,13 +5,20 @@ const findAll = async (limit, offset) => {
     const jobs = [];
     try {
         const { records } = await session.readTransaction(tx =>
-            tx.run(`MATCH (j:Job)-[:HAS_BENEFIT]->(jb:JobBenefit) return j,jb skip ${offset} limit ${limit}`)
-        )
-        console.log('================================')
-        for (let record of records) {
-            const result = {job: record._fields[0].properties, benefits: [record._fields[1].properties]}
-            console.log(result)
-            jobs.push(result);
+            tx.run(`MATCH (j:Job) RETURN j SKIP ${offset} LIMIT ${limit}`)
+        );
+
+        for (let jobRecord of records) {
+            const jobId = jobRecord._fields[0].properties.jobId.low;
+            const { records } = await session.readTransaction(tx => 
+                tx.run(`MATCH (j:Job { jobId: ${jobId} })-[:HAS_BENEFIT]-> (jb:JobBenefit) return jb`)
+            );
+            let jobBenefits = [];
+            for(let benefitRecord of records) {
+                jobBenefits.push(benefitRecord._fields[0].properties);
+            }
+            const job = jobRecord._fields[0].properties;
+            jobs.push({job: job, benefits: jobBenefits})
         }
         return jobs;
     } catch(error) {
@@ -20,7 +27,54 @@ const findAll = async (limit, offset) => {
      finally {
         await session.close();
     }
-}
+};
+
+const findOne = async (jobId) => {
+    const session = neo4jDriver.session({database: 'neo4j'});
+    try {
+        const jobRecords = await session.readTransaction(tx =>
+            tx.run(`MATCH (j:Job { jobId:${jobId} }) RETURN j`)
+        );
+        const job = jobRecords.records[0]._fields[0].properties;
+        const benefitsRecords = await session.readTransaction(tx =>
+            tx.run(`MATCH (j:Job { jobId:${jobId} })-[:HAS_BENEFIT]->(jb:JobBenefit) return jb`)
+        );
+        benefits = [];
+        for (benefit of benefitsRecords.records) {
+            benefits.push(benefit._fields[0].properties);
+        }
+        return {job: job, benefits: benefits};
+    } catch(error) {
+        console.log(error.message)
+        return error.message;
+    }
+     finally {
+        await session.close();
+    }
+};
+
+const patchOne = async () => {
+    
+};
+
+const create = async () => {
+    
+};
+
+
+const deleteOne = async (jobId) => {
+    const session = neo4jDriver.session({database: 'neo4j'});
+    try {
+        await session.readTransaction(tx =>
+            tx.run(`MATCH (j:Job { jobId:${jobId} }) DETACH DELETE j`)
+        );
+    } catch(error) {
+        console.log(error.message)
+    }
+     finally {
+        await session.close();
+    }
+};
 
 // const findById = async (id) =>{
 //     const result = await session.run(`MATCH (u:User {_id : '${id}'} ) return u limit 1`)
@@ -62,6 +116,8 @@ const findAll = async (limit, offset) => {
 
 module.exports = {
     findAll,
+    deleteOne,
+    findOne,
     // findById,
     // create,
     // findByIdAndUpdate,
