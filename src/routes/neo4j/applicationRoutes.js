@@ -14,7 +14,7 @@ router.get('/applications', async (req, res) => {
 });
 
 router.post('/applications', async (req, res) => {
-    let newApplication = {...req.body, createdAt: new Date()}
+    let newApplication = {...req.body, createdAt: new Date()};
     const result = await applicationModel.create(newApplication);
     res.json(result);
 });

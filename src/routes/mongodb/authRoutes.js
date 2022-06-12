@@ -13,7 +13,7 @@ router.post('/signup', async (req, res) => {
     const user = new User({ email, password, username, role });
     await user.save();
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+    const token = jwt.sign({ userId: user._id.toString() }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
     return res.status(422).send(e.message); // invalid data
