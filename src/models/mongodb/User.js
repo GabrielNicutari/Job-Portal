@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const cryptPassword = require('../../utils/cryptPassword').cryptAsync;
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -14,6 +15,10 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  role: {
+    type: String,
+    required: true
   }
 });
 
@@ -23,19 +28,27 @@ userSchema.pre('save', function (next) {
   if (!user.isModified('password')) {
     return next;
   }
-  bcrypt.genSalt(10, (err, salt) => {
+
+  cryptPassword(user.password, (err, hash) => {
     if (err) {
       return next(err);
     }
 
-    bcrypt.hash(user.password, salt, (err, hash) => {
-      if (err) {
-        return next(err);
-      }
+    user.password = hash;
+    return next();
+  });
+});
 
-      user.password = hash;
-      next();
-    });
+userSchema.pre('updateOne', function (next) {
+  const user = this.getUpdate();
+
+  cryptPassword(user.password, (err, hash) => {
+    if (err) {
+      return next(err);
+    }
+
+    user.password = hash;
+    return next();
   });
 });
 
