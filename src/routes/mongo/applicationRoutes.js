@@ -19,7 +19,7 @@ router.get('/applications', async (req, res) => {
   }
 });
 
-router.post('/application/:jobId', async (req, res) => {
+router.post('/applications/:jobId', async (req, res) => {
   try {
     const jobId = req.params.jobId;
     const job = await JobModel.findById(new ObjectId(jobId));

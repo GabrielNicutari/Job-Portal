@@ -1,7 +1,7 @@
 const { getPagination } = require('../helperFunctions');
-const JobModel = require('../../models/mongo/Job');
-
 const express = require('express');
+const mongoose = require('mongoose');
+const JobModel = mongoose.model('Job');
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectId;
 
