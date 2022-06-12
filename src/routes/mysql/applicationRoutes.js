@@ -21,7 +21,7 @@ router.get('/applications', async (req, res) => {
     });
 });
 
-router.post('/application', async (req, res) => {
+router.post('/applications', async (req, res) => {
   try {
     const savedApplication = await db.models.applications.create({
       ...req.body,
@@ -35,7 +35,7 @@ router.post('/application', async (req, res) => {
   }
 });
 
-router.put('/application/:applicationId', async (req, res) => {
+router.put('/applications/:applicationId', async (req, res) => {
   db.models.applications
     .update(
       { phone_number: req.body.new_phone_number },
@@ -51,7 +51,7 @@ router.put('/application/:applicationId', async (req, res) => {
     });
 });
 
-router.delete('/application/:applicationId', async (req, res) => {
+router.delete('/applications/:applicationId', async (req, res) => {
   db.models.applications
     .destroy({ where: { id: { [Op.eq]: Number(req.params.applicationId) } } })
     .then(() => {
