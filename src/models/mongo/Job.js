@@ -1,53 +1,48 @@
 const mongoose = require('mongoose');
 
+const companySchema = require('./Company');
+const benefitSchema = require('./Benefit');
+const categoriesSchema = require('./Category');
+
 const jobSchema = new mongoose.Schema({
-  //TODO: define the correct schema here
-  company: {
+  jobTitle: {
     type: String,
-    // unique: true,
-    // required: true
-  }
+    required: true,
+    trim: true
+  },
+  jobCity: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  jobDescription: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  jobHasSalary: {
+    type: Boolean,
+    required: true
+  },
+  jobDateCreated: {
+    type: Date,
+    trim: true,
+    required: true,
+    default: Date.now()
+  },
+  jobStatus: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  jobType: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  company: companySchema,
+  benefits: [benefitSchema],
+  categories: [categoriesSchema]
 });
-//
-// userSchema.pre('save', function (next) {
-//   // we use "function" instead of () =>.. because we want access to "this"
-//   const user = this;
-//   if (!user.isModified('password')) {
-//     return next;
-//   }
-//   bcrypt.genSalt(10, (err, salt) => {
-//     if (err) {
-//       return next(err);
-//     }
-//
-//     bcrypt.hash(user.password, salt, (err, hash) => {
-//       if (err) {
-//         return next(err);
-//       }
-//
-//       user.password = hash;
-//       next();
-//     });
-//   });
-// });
-//
-// userSchema.methods.comparePassword = function (candidatePassword) {
-//   const user = this;
-//
-//   return new Promise((resolve, reject) => {
-//     bcrypt.compare(candidatePassword, user.password, (err, isMatch) => {
-//       if (err) {
-//         return reject(err);
-//       }
-//
-//       if (!isMatch) {
-//         return reject(false);
-//       }
-//
-//       resolve(true);
-//     });
-//   });
-// };
+
 mongoose.model('Job', jobSchema);
-
-
