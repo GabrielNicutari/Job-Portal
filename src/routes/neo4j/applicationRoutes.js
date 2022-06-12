@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const applicationModel = require('../../models/neo4j/Application');
-const { getPagination, getPagingData } = require('../helperFunctions');
+const { getPagination } = require('../helperFunctions');
 
-router.get('/neo4j/application', async (req, res) => {
+router.get('/neo4j/applications', async (req, res) => {
     let {page, size, email} = req.query;
     if (!email) {
         email = '';

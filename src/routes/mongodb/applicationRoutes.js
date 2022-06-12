@@ -28,7 +28,7 @@ router.post('/mongo/application/:jobId', async (req, res) => {
   }
 });
 
-router.get('/mongo/application', async (req, res) => {
+router.get('/mongo/applications', async (req, res) => {
   try {
     const { page, size } = req.query;
     const { limit, offset } = getPagination(page, size);

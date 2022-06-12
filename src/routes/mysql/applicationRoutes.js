@@ -4,7 +4,7 @@ const db = require('../../models/mysql/dbAssociations');
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require('../helperFunctions')
 
-router.post('/mysql/application', async (req, res) => {
+router.post('/mysql/applications', async (req, res) => {
     try {
         const savedApplication = await db.models.applications.create({...req.body, created_at: new Date()});
         if (savedApplication) {
