@@ -34,7 +34,7 @@ router.post('/mysql/application', async (req, res) => {
 });
 
 router.put('/mysql/application/:applicationId', async (req, res) => {
-    db.models.applications.update({phone_number: req.body.phone}, {where: {id: {[Op.eq]: Number(req.params.applicationId)}}})
+    db.models.applications.update({phone_number: req.body.new_phone_number}, {where: {id: {[Op.eq]: Number(req.params.applicationId)}}})
         .then(data => {
             res.send(data);
         })
