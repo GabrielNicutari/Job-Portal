@@ -1,10 +1,6 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const AuthUser = mongoose.model('User');
 const db = require('../../models/mysql/dbAssociations');
-const { QueryTypes } = require('sequelize');
 
 const router = express.Router();
 
@@ -14,20 +10,20 @@ router.post('/signup', async (req, res) => {
   const { email, password, username, roleId } = req.body;
 
   try {
-    const authUser = new AuthUser({ email, password, username });
-    await authUser.save();
+    const User = db.models.users;
+    const response = await User.create({
+      email: email,
+      password: password,
+      username: username,
+      roleId: roleId
+    });
 
-    const result = await db.query(
-      `call job_portal.add_user(\'${email}\', \'${username}\', ${password}, ${roleId});`,
-      { type: QueryTypes.RAW }
-    );
+    const userId = response.id;
 
-    console.log(result[0].user_id);
-
-    const token = jwt.sign({ authUserId: authUser._id }, JWT_SECRET);
+    const token = jwt.sign({ userId: userId }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
-    return res.status(422).send(e.message); // invalid data
+    return res.status(422).send(e.message);
   }
 });
 
@@ -37,14 +33,16 @@ router.post('/signin', async (req, res) => {
     return res.status(422).send({ error: 'Must provide email and password' });
   }
 
-  const authUser = await AuthUser.findOne({ email });
-  if (!authUser) {
+  const User = db.models.users;
+  const user = await User.findOne({ where: { email: email } });
+
+  if (!user) {
     return res.status(404).send({ error: 'Invalid password or email' });
   }
 
   try {
-    await authUser.comparePassword(password);
-    const token = jwt.sign({ authUserId: authUser._id }, JWT_SECRET);
+    await user.comparePassword(password);
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
     return res.status(401).send({ error: 'Invalid password or email' });

@@ -1,11 +1,9 @@
 const express = require('express');
 const db = require('../../models/mysql/dbAssociations');
-const requireAuth = require('../../middlewares/requireAuth');
 
 const router = express.Router();
-router.use(requireAuth);
 
-router.delete('/user/:id', async (req, res) => {
+router.delete('/users/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -24,12 +22,15 @@ router.delete('/user/:id', async (req, res) => {
   }
 });
 
-router.put('/user/:id', async (req, res) => {
+router.patch('/users/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
     const User = db.models.users;
-    const result = await User.update(req.body, { where: { id: id } });
+    const result = await User.update(req.body, {
+      where: { id: id },
+      individualHooks: true
+    });
 
     if (result[0] === 1) {
       //Number of affected rows
