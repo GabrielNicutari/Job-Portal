@@ -16,14 +16,14 @@ const mongoApplicationRoutes = require('./routes/mongodb/applicationRoutes');
 
 // mysql routes
 const mysqlJobRoutes = require('./routes/mysql/jobRoutes');
-const mysqlUserRoutes = require('./routes/mysql/userRoutes');
+// const mysqlUserRoutes = require('./routes/mysql/userRoutes');
 const mysqlApplicationRoutes = require('./routes/mysql/applicationRoutes');
+const mongoJobRoutes = require('./routes/mongodb/jobRoutes');
 
 // neo4j routes
 const neo4jApplicationRoutes = require('./routes/neo4j/applicationRoutes');
 const neo4jJobRoutes = require('./routes/neo4j/jobRoutes');
 
-const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
 const neo4jDriver = require('../src/database/neo4jConfig');
 
@@ -41,11 +41,11 @@ app.use(neo4jJobRoutes);
 app.use('/mysql', mysqlAuthRoutes);
 app.use('/mongo', mongoAuthRoutes);
 
-app.use(requireAuth);
-app.use('/mysql', mysqlUserRoutes);
+// app.use('/mysql', mysqlUserRoutes);
 app.use('/mysql', mysqlJobRoutes);
 app.use('/mysql', mysqlApplicationRoutes);
 
+app.use('/mongo', mongoJobRoutes);
 app.use('/mongo', mongoUserRoutes);
 app.use('/neo4j', neo4jApplicationRoutes);
 app.use('/neo4j', neo4jJobRoutes);
@@ -60,11 +60,6 @@ app.use('/neo4j', neo4jJobRoutes);
     mongoose.connection.on('connected', () => {
       console.log('Connected to mongo instance');
     });
-
-    // app.get('/', requireAuth, (req, res) => {
-    //   console.log(req.user);
-    //   res.send(`Your email: ${req.user.email}`);
-    // });
 
     const PORT = process.env.PORT || 8080;
 

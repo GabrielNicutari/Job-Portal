@@ -22,7 +22,7 @@ const Job = (sequelize) => {
                 type: DataTypes.TEXT,
                 allowNull: false,
             },
-            salary: {
+            has_salary: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
             },
