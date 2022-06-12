@@ -1,17 +1,23 @@
 const neo4jDriver = require('../../database/neo4jConfig');
 
-const findAll = async (city, category, limit, offset) => {
+const findAll = async (limit, offset) => {
     const session = neo4jDriver.session({database: 'neo4j'});
     const jobs = [];
     try {
-        const result = await session.readTransaction(tx =>
-            tx.run(`MATCH (jc:JobCategory)-[:CONTAINS_JOB]->(j:Job) WHERE jc.name = '${category}' AND j.city = '${city}' return j skip ${offset} limit ${limit}`)
+        const { records } = await session.readTransaction(tx =>
+            tx.run(`MATCH (j:Job)-[:HAS_BENEFIT]->(jb:JobBenefit) return j,jb skip ${offset} limit ${limit}`)
         )
-        for (let record of result.records) {
-            jobs.push(record._fields[0].properties);
+        console.log('================================')
+        for (let record of records) {
+            const result = {job: record._fields[0].properties, benefits: [record._fields[1].properties]}
+            console.log(result)
+            jobs.push(result);
         }
         return jobs;
-    } finally {
+    } catch(error) {
+        console.log(error)
+    }
+     finally {
         await session.close();
     }
 }

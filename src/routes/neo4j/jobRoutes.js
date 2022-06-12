@@ -3,10 +3,11 @@ const router = express.Router();
 const jobModel = require('../../models/neo4j/Job');
 const { getPagination, getPagingData } = require('../helperFunctions');
 
-router.get('/neo4j/job', async (req, res) => {
-    let {page, size, city, category} = req.query;
+router.get('/jobs', async (req, res) => {
+    let {page, size} = req.query;
     const {limit, offset} = getPagination(page, size);
-    const result = await jobModel.findAll(city, category, limit, offset);
+    console.log(limit, offset)
+    const result = await jobModel.findAll(limit, offset);
     res.json(result);
 });
 
