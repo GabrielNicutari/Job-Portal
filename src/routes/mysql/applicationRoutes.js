@@ -11,7 +11,6 @@ router.get('/mysql/applications', async (req, res) => {
     db.models.applications.findAndCountAll({where: condition, limit, offset,})
         .then(data => {
             const response = getPagingData(data, page, limit);
-            console.log('response = ', response);
             res.send(response);
         })
         .catch(err => {

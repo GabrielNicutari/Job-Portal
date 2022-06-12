@@ -12,7 +12,6 @@ router.get('/mongo/applications', async (req, res) => {
   try {
     const { page, size } = req.query;
     const { limit, offset } = getPagination(page, size);
-    console.log('limit, offset = ', limit, offset);
     const applications = await ApplicationModel.find().skip(offset).limit(limit);
     res.send(applications);
   } catch (err) {
