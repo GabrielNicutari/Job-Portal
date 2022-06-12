@@ -9,6 +9,9 @@ const mongoAuthRoutes = require('./routes/mongodb/authRoutes');
 const mysqlJobRoutes = require('./routes/mysql/jobRoutes');
 const mysqlUserRoutes = require('./routes/mysql/userRoutes');
 const mysqlApplicationRoutes = require('./routes/mysql/applicationRoutes');
+
+const mongoUserRoutes = require('./routes/mongodb/userRoutes');
+
 const neo4jApplicationRoutes = require('./routes/neo4j/applicationRoutes');
 const neo4jJobRoutes = require('./routes/neo4j/jobRoutes');
 
@@ -28,6 +31,7 @@ app.use('/mysql', mysqlUserRoutes);
 app.use('/mysql', mysqlJobRoutes);
 app.use('/mysql', mysqlApplicationRoutes);
 
+app.use('/mongo', mongoUserRoutes);
 app.use('/neo4j', neo4jApplicationRoutes);
 app.use('/neo4j', neo4jJobRoutes);
 

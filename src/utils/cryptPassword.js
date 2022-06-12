@@ -11,7 +11,7 @@ const cryptAsync = (password, callback) => {
       return callback(err);
     }
 
-    bcrypt.hash(password, salt, null, function (err, hash) {
+    bcrypt.hash(password, salt, callback, function (err, hash) {
       return callback(err, hash);
     });
   });
