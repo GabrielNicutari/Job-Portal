@@ -4,18 +4,7 @@ const db = require('../../models/mysql/dbAssociations');
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require('../helperFunctions')
 
-router.post('/mysql/applications', async (req, res) => {
-    try {
-        const savedApplication = await db.models.applications.create({...req.body, created_at: new Date()});
-        if (savedApplication) {
-            res.status(200).send(savedApplication);
-        }
-    } catch {
-        res.status(500).send({message: 'Could not create a new application!'});
-    }
-});
-
-router.get('/mysql/application', async (req, res) => {
+router.get('/mysql/applications', async (req, res) => {
     const {page, size, email} = req.query;
     const condition = email ? {email: {[Op.like]: `%${email}%`}} : null;
     const {limit, offset} = getPagination(page, size);
@@ -31,6 +20,17 @@ router.get('/mysql/application', async (req, res) => {
                     err.message || "Some error occurred while retrieving tutorials."
             });
         });
+});
+
+router.post('/mysql/application', async (req, res) => {
+    try {
+        const savedApplication = await db.models.applications.create({...req.body, created_at: new Date()});
+        if (savedApplication) {
+            res.status(200).send(savedApplication);
+        }
+    } catch {
+        res.status(500).send({message: 'Could not create a new application!'});
+    }
 });
 
 router.put('/mysql/application/:applicationId', async (req, res) => {
