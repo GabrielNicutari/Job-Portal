@@ -1,27 +1,42 @@
-require('./models/mongodb/User');
+const fs = require('fs');
+const models_path = __dirname + '/models/mongo'
+fs.readdirSync(models_path).forEach(function (file) {
+  require(models_path + '/' + file);
+})
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const mongoUri = require('./database/mongoConfig');
 
-const mysqlAuthRoutes = require('./routes/mysql/authRoutes');
+// mongo routes
 const mongoAuthRoutes = require('./routes/mongodb/authRoutes');
+const mongoUserRoutes = require('./routes/mongodb/userRoutes');
+const mongoApplicationRoutes = require('./routes/mongodb/applicationRoutes');
 
+// mysql routes
 const mysqlJobRoutes = require('./routes/mysql/jobRoutes');
 const mysqlUserRoutes = require('./routes/mysql/userRoutes');
 const mysqlApplicationRoutes = require('./routes/mysql/applicationRoutes');
 
-const mongoUserRoutes = require('./routes/mongodb/userRoutes');
-
+// neo4j routes
 const neo4jApplicationRoutes = require('./routes/neo4j/applicationRoutes');
 const neo4jJobRoutes = require('./routes/neo4j/jobRoutes');
 
 const requireAuth = require('./middlewares/requireAuth');
 const db = require('./models/mysql/dbAssociations');
 const neo4jDriver = require('../src/database/neo4jConfig');
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(mongoAuthRoutes);
+app.use(userRoutes);
+app.use(jobRoutes);
+app.use(mySQLApplicationRoutes);
+app.use(neo4jApplicationRoutes);
+app.use(neo4jJobRoutes);
 
 app.use('/mysql', mysqlAuthRoutes);
 app.use('/mongo', mongoAuthRoutes);
@@ -34,13 +49,6 @@ app.use('/mysql', mysqlApplicationRoutes);
 app.use('/mongo', mongoUserRoutes);
 app.use('/neo4j', neo4jApplicationRoutes);
 app.use('/neo4j', neo4jJobRoutes);
-
-const user = process.env.MONGO_USERNAME;
-const password = process.env.MONGO_PASSWORD;
-const database = process.env.MONGO_DATABASE;
-
-const mongoUri = `mongodb+srv://${user}:${password}@cluster0.ejki7.mongodb.net/${database}?retryWrites=true&w=majority`;
-
 (initApp = async () => {
   try {
     mongoose.connect(mongoUri, {
