@@ -7,7 +7,6 @@ const {getPagination} = require("../helperFunctions");
 router.post('/jobs', async (req, res) => {
   const date = new Date();
   // start a transaction because we need to execute multiple queries for this endpoint
-
   const job = req.body.job;
   const addJobQuery = `call job_portal.add_job(
     "${job.title}", 
