@@ -11,18 +11,19 @@ const mongoUri = require('./database/mongoConfig');
 const requireAuth = require('./middlewares/requireAuth');
 
 // mongo routes
-const mongoAuthRoutes = require('./routes/mongo/authRoutes');
-const mongoUserRoutes = require('./routes/mongo/userRoutes');
-const mongoApplicationRoutes = require('./routes/mongo/applicationRoutes');
+const mongoAuthRoutes = require('./routes/mongodb/authRoutes');
+const mongoUserRoutes = require('./routes/mongodb/userRoutes');
+const mongoJobRoutes = require('./routes/mongodb/jobRoutes');
+const mongoApplicationRoutes = require('./routes/mongodb/applicationRoutes');
 
 // mysql routes
 const mysqlAuthRoutes = require('./routes/mysql/authRoutes');
 const mysqlJobRoutes = require('./routes/mysql/jobRoutes');
 const mysqlUserRoutes = require('./routes/mysql/userRoutes');
 const mysqlApplicationRoutes = require('./routes/mysql/applicationRoutes');
-const mongoJobRoutes = require('./routes/mongo/jobRoutes');
 
 // neo4j routes
+const neo4jAuthRoutes = require('./routes/neo4j/authRoutes');
 const neo4jApplicationRoutes = require('./routes/neo4j/applicationRoutes');
 const neo4jJobRoutes = require('./routes/neo4j/jobRoutes');
 
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/mysql', mysqlAuthRoutes);
 app.use('/mongo', mongoAuthRoutes);
+app.use('/neo4j', neo4jAuthRoutes);
 
 app.use(requireAuth);
 app.use('/mysql', mysqlJobRoutes);

@@ -13,14 +13,14 @@ router.post('/signup', async (req, res) => {
     const user = new User({ email, password, username, role });
     await user.save();
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+    const token = jwt.sign({ userId: user._id.toString() }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
     return res.status(422).send(e.message); // invalid data
   }
 });
 
-router.post('/mongo/signin', async (req, res) => {
+router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(422).send({ error: 'Must provide email and password' });
@@ -33,7 +33,7 @@ router.post('/mongo/signin', async (req, res) => {
 
   try {
     await user.comparePassword(password);
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+    const token = jwt.sign({ userId: user._id.toString() }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
     return res.status(401).send({ error: 'Invalid password or email' });

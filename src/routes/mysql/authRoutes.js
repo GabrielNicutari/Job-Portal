@@ -42,7 +42,7 @@ router.post('/signin', async (req, res) => {
 
   try {
     await user.comparePassword(password);
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET);
     res.send({ token });
   } catch (e) {
     return res.status(401).send({ error: 'Invalid password or email' });

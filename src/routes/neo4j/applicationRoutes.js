@@ -3,7 +3,7 @@ const router = express.Router();
 const applicationModel = require('../../models/neo4j/Application');
 const { getPagination } = require('../helperFunctions');
 
-router.get('/neo4j/applications', async (req, res) => {
+router.get('/applications', async (req, res) => {
     let {page, size, email} = req.query;
     if (!email) {
         email = '';
@@ -13,8 +13,8 @@ router.get('/neo4j/applications', async (req, res) => {
     res.json(result);
 });
 
-router.post('/neo4j/application', async (req, res) => {
-    let newApplication = {...req.body, createdAt: new Date()}
+router.post('/applications', async (req, res) => {
+    let newApplication = {...req.body, createdAt: new Date()};
     const result = await applicationModel.create(newApplication);
     res.json(result);
 });
