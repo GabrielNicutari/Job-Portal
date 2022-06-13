@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../models/mysql/dbAssociations');
+const JobStatus = require('../../models/mysql/JobStatus');
 const {getPagination} = require("../helperFunctions");
 
 router.post('/jobs', async (req, res) => {
@@ -21,13 +22,22 @@ router.post('/jobs', async (req, res) => {
   try {
     // Initially, the job has to be created so that the new id is retrieved and used for the jobs-have-benefits table
     const response = await db.query(addJobQuery, {transaction: t});
+    const jobId = response[0].job_id;
+
     const benefits = req.body.benefits;
     if (response && response.length) {
-      const jobId = response[0].job_id;
       for (const benefitId of benefits) {
         await db.models['jobs-have-benefits'].create({
           job_id: jobId,
           benefit_id: benefitId
+        }, {transaction: t});
+      }
+
+      const categories = req.body.categories;
+      for (const category of categories) {
+        await db.models['categories-have-jobs'].create({
+          category_id: category,
+          job_id:  jobId
         }, {transaction: t});
       }
       await t.commit();
@@ -55,6 +65,31 @@ const replaceForeignKeysWithValues = async (job, t) => {
   // console.log('inside', job)
 }
 
+const getBenefits = async (job, t) => {
+  const jobId = job.dataValues.id;
+  const benefitsRecords = await db.models['jobs-have-benefits'].findAll({where: {job_id: jobId}}, {transaction: t});
+
+  let benefits = [];
+  for (const benefitRecord of benefitsRecords) {
+    const benefit = await db.models.benefits.findOne( { where: { id: benefitRecord.dataValues.benefit_id } } ); 
+    benefits.push(benefit);
+  }
+  return benefits;
+};
+
+const getCategories = async (job, t) => {
+  const jobId = job.dataValues.id;
+  const categoriesRecords = await db.models['categories-have-jobs'].findAll( { where: { job_id: jobId } }, {transaction: t} );
+
+  let categories = [];
+  console.log(categoriesRecords)
+  for (const categoryRecord of categoriesRecords) {
+    const category = await db.models.categories.findOne( { where: { id: categoryRecord.dataValues.category_id } } );
+    categories.push(category);
+  }
+  return categories;
+};
+
 router.get('/jobs', async (req, res) => {
   const {page, size} = req.query;
   const {limit, offset} = getPagination(page, size);
@@ -65,10 +100,14 @@ router.get('/jobs', async (req, res) => {
     if (jobs && jobs.length) {
       for (let job of jobs) {
         await replaceForeignKeysWithValues(job, t);
+        const benefits = await getBenefits(job, t);
+        const categories = await getCategories(job, t);
+        job.dataValues.benefits = benefits;
+        job.dataValues.categories = categories;
       }
+
       await t.commit();
       res.status(200).send(jobs);
-      // res.send(jobs)
   } else {
     await t.rollback();
     res.status(500).send({ message: 'Something went wrong' });
@@ -86,6 +125,10 @@ router.get('/jobs/:id', async (req, res) => {
     const job = await db.models.jobs.findOne({where: {id: req.params.id}}, {transaction: t});
     if (job) {
       await replaceForeignKeysWithValues(job, t);
+      const benefits = await getBenefits(job, t);
+      const categories = await getCategories(job, t);
+      job.dataValues.benefits = benefits;
+      job.dataValues.categories = categories;
       await t.commit();
       res.status(200).send(job);
     } else {

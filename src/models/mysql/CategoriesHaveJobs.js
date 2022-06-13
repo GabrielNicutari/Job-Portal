@@ -1,23 +1,8 @@
 const { DataTypes } = require('sequelize');
 
 const CategoriesHaveJobs = (sequelize, Category, Job) => {
-  return sequelize.define('categories-have-jobs', {
-    category_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      references: {
-        model: Category,
-        key: 'id'
-      }
-    },
-    job_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      references: {
-        model: Job,
-        key: 'id'
-      }
-    }
-  });
+    // sequelize will automatically generate the composite key based on the foreign keys which are passed in the association
+  return sequelize.define('categories-have-jobs', {},
+  { timestamps: false });
 }
 module.exports = CategoriesHaveJobs;
