@@ -34,6 +34,20 @@ const login = async (user) => {
   }
 };
 
+const findById = async (id) => {
+  const session = neo4jDriver.session({ database: 'neo4j' });
+
+  try {
+    const query = `MATCH (u:User) WHERE ID(u) = ${id} RETURN u`;
+    return await session.run(query);
+  } catch (error) {
+    console.log(error);
+    return 'Something went wrong';
+  } finally {
+    await session.close();
+  }
+};
+
 const comparePassword = (candidatePassword, userPassword) => {
   return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, userPassword, (err, isMatch) => {
@@ -52,5 +66,6 @@ const comparePassword = (candidatePassword, userPassword) => {
 module.exports = {
   register,
   login,
-  comparePassword
+  comparePassword,
+  findById
 };
