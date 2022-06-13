@@ -11,10 +11,10 @@ const mongoUri = require('./database/mongoConfig');
 const requireAuth = require('./middlewares/requireAuth');
 
 // mongo routes
-const mongoAuthRoutes = require('./routes/mongodb/authRoutes');
-const mongoUserRoutes = require('./routes/mongodb/userRoutes');
-const mongoJobRoutes = require('./routes/mongodb/jobRoutes');
-const mongoApplicationRoutes = require('./routes/mongodb/applicationRoutes');
+const mongoAuthRoutes = require('./routes/mongo/authRoutes');
+const mongoUserRoutes = require('./routes/mongo/userRoutes');
+const mongoJobRoutes = require('./routes/mongo/jobRoutes');
+const mongoApplicationRoutes = require('./routes/mongo/applicationRoutes');
 
 // mysql routes
 const mysqlAuthRoutes = require('./routes/mysql/authRoutes');
