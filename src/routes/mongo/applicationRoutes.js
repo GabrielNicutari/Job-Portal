@@ -19,9 +19,9 @@ router.get('/applications', async (req, res) => {
   }
 });
 
-router.post('/application/:jobId', async (req, res) => {
+router.post('/applications', async (req, res) => {
   try {
-    const jobId = req.params.jobId;
+    const jobId = req.body.jobId;
     const job = await JobModel.findById(new ObjectId(jobId));
     const { resume, fullName, phoneNumber, email } = req.body;
     const linkedinUrl = req.body?.linkedinUrl;

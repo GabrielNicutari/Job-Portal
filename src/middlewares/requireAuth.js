@@ -19,7 +19,8 @@ module.exports = (req, res, next) => {
 
     const { userId } = payload;
     // decoded claims, sort of
-    req.user = await User.findById(userId);
+    // when we sign in with neo4j, it crashes here...
+    // req.user = await User.findById(userId);
     next();
   });
 };
