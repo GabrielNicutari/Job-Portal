@@ -1,7 +1,8 @@
-const { getPagination } = require('../helperFunctions');
-const express = require('express');
 const mongoose = require('mongoose');
 const JobModel = mongoose.model('Job');
+const { getPagination } = require('../helperFunctions');
+
+const express = require('express');
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectId;
 
@@ -18,6 +19,7 @@ router.get('/jobs', async (req, res) => {
 
 router.get('/jobs/:id', async (req, res) => {
   try {
+    
     const job = await JobModel.findById(new ObjectId(req.params.id));
     res.status(200).send(job);
   } catch (error) {

@@ -1,15 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const jobModel = require('../../models/neo4j/Job');
-const { getPagination, getPagingData } = require('../helperFunctions');
+const {findAll, deleteOne, findOne} = require('../../models/neo4j/Job');
+const { getPagination } = require('../helperFunctions');
 
-router.get('/neo4j/job', async (req, res) => {
-    let {page, size, city, category} = req.query;
+router.get('/jobs', async (req, res) => {
+    let {page, size} = req.query;
     const {limit, offset} = getPagination(page, size);
-    const result = await jobModel.findAll(city, category, limit, offset);
-    res.json(result);
+    try {
+        const jobs = await findAll(limit, offset);
+        res.status(200).json(jobs);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
 });
 
+router.get('/jobs/:id', async (req, res) => {
+    try {
+        const job = await findOne(req.params.id);
+        res.status(200).json(job);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+});
+
+router.delete('/jobs/:id', async (req, res) => {
+    try {
+        // console.log(req.params.id)
+        await deleteOne(req.params.id);
+        res.status(200).json({message: "Job has been removed"})
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+});
 //
 // router.post('/neo4j/application', async (req, res) => {
 //     let newApplication = {...req.body, createdAt: new Date()}
