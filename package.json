@@ -1,5 +1,5 @@
 {
-  "name": "job-portal",
+  "name": "job-portal-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -23,9 +23,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.18.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.3.1",
     "mysql2": "^2.3.3",
-    "neo4j-driver": "^4.4.5",
     "sequelize": "^6.19.0"
   },
   "devDependencies": {
